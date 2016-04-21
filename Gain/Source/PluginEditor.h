@@ -13,12 +13,13 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "PluginProcessor.h"
+#include "MeterComponent.h"
 
 
 //==============================================================================
 /**
 */
-class NewProjectAudioProcessorEditor  : public AudioProcessorEditor, public ButtonListener, public SliderListener
+class NewProjectAudioProcessorEditor  : public AudioProcessorEditor, public ButtonListener, public SliderListener, public Timer
 {
 public:
     NewProjectAudioProcessorEditor (NewProjectAudioProcessor&);
@@ -27,12 +28,14 @@ public:
     Slider _slider_mod_freq;
     Slider _slider_mod_amp;
     TextButton _toggle_button;
+    MeterComponent _peak_meter;
 
     //==============================================================================
     void paint (Graphics&) override;
     void resized() override;
     void buttonClicked(Button* button) override;
     void sliderValueChanged(Slider* slider) override;
+    void timerCallback() override;
     
 private:
     // This reference is provided as a quick way for your editor to

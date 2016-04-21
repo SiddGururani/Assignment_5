@@ -11,6 +11,12 @@
               pluginAAXCategory="AAX_ePlugInCategory_Dynamics" jucerVersion="4.1.0">
   <MAINGROUP id="NzRCXz" name="VibratoOoOo">
     <GROUP id="{3CA0AA3C-EB04-87CD-1973-6AD0E6660699}" name="Source">
+      <FILE id="CPk33b" name="MeterComponent.cpp" compile="1" resource="0"
+            file="Source/MeterComponent.cpp"/>
+      <FILE id="pAkjbw" name="MeterComponent.h" compile="0" resource="0"
+            file="Source/MeterComponent.h"/>
+      <FILE id="r2iRgA" name="Ppm.cpp" compile="1" resource="0" file="Source/Ppm.cpp"/>
+      <FILE id="q9yasT" name="Ppm.h" compile="0" resource="0" file="Source/Ppm.h"/>
       <FILE id="BXg4xP" name="Util.h" compile="0" resource="0" file="Source/Util.h"/>
       <FILE id="k8OE7E" name="Synthesis.h" compile="0" resource="0" file="Source/Synthesis.h"/>
       <FILE id="mBD0F3" name="Lfo.h" compile="0" resource="0" file="Source/Lfo.h"/>

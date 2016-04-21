@@ -24,6 +24,8 @@ using namespace std;
 NewProjectAudioProcessor::NewProjectAudioProcessor()
 {
     _vibrato = 0;
+    _ppm = 0;
+    _ppm_value = 0;
     _is_bypassed = false;
     _param_updated = false;
     _mod_frequency = new AudioParameterFloat("mod freq","Modulation Frequency", MIN_MOD_FREQ, MAX_MOD_FREQ, DEFAULT_MOD_FREQ);
@@ -35,6 +37,8 @@ NewProjectAudioProcessor::NewProjectAudioProcessor()
 NewProjectAudioProcessor::~NewProjectAudioProcessor()
 {
     CVibrato::destroyInstance(_vibrato);
+    Ppm::destroyInstance(_ppm);
+    delete [] _ppm_value;
 }
 
 //==============================================================================
@@ -91,7 +95,20 @@ void NewProjectAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
     const int totalNumOutputChannels = getTotalNumOutputChannels();
     int num_channels = max(totalNumOutputChannels, totalNumInputChannels);
     
+    if(_vibrato != nullptr) {
+        CVibrato::destroyInstance(_vibrato);
+    }
     _error_check = CVibrato::createInstance(_vibrato);
+    if (_error_check == kUnknownError)
+    {
+        cerr << "Runtime error. Memory issues." << endl;
+    }
+    
+    
+    if(_ppm != nullptr) {
+        Ppm::destroyInstance(_ppm);
+    }
+    _error_check = Ppm::createInstance(_ppm);
     if (_error_check == kUnknownError)
     {
         cerr << "Runtime error. Memory issues." << endl;
@@ -103,6 +120,17 @@ void NewProjectAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
         cerr << "Invalid parameters: One or more parameters is out of bounds. Please check your parameters." << endl;
     }
     
+    _error_check = _ppm->initInstance(sampleRate, num_channels);
+    if (_error_check == kFunctionInvalidArgsError)
+    {
+        cerr << "Invalid parameters: One or more parameters is out of bounds. Please check your parameters." << endl;
+    }
+    
+    
+    _ppm_value = new float [num_channels];
+    for (int i = 0; i < num_channels; i++) {
+        _ppm_value[i] = 0;
+    }
     //initialize with default parameters
     setParameter(0, getParameterDefaultValue(0));
     setParameter(1, getParameterDefaultValue(1));
@@ -131,6 +159,8 @@ void NewProjectAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuff
         }
         float** write_pointer = buffer.getArrayOfWritePointers();
         _vibrato->process(write_pointer, write_pointer, buffer.getNumSamples());
+        //const float** read_pointer = buffer.getArrayOfReadPointers();
+        _ppm->process(write_pointer, buffer.getNumSamples(), _ppm_value);
     }
 }
 
@@ -139,6 +169,8 @@ void NewProjectAudioProcessor::processBlockBypassed (AudioSampleBuffer& buffer, 
     setParametersBypassed();
     float** write_pointer = buffer.getArrayOfWritePointers();
     _vibrato->process(write_pointer, write_pointer, buffer.getNumSamples());
+    //const float** read_pointer = buffer.getArrayOfReadPointers();
+    _ppm->process(write_pointer, buffer.getNumSamples(), _ppm_value);
 }
 
 //==============================================================================
@@ -212,6 +244,10 @@ bool NewProjectAudioProcessor::getBypassedState()
 void NewProjectAudioProcessor::setBypassedState(bool state)
 {
     _is_bypassed = state;
+}
+
+float NewProjectAudioProcessor::getPeakMeterValue() {
+    return _ppm_value[0];
 }
 
 /*

@@ -19,6 +19,9 @@ NewProjectAudioProcessorEditor::NewProjectAudioProcessorEditor (NewProjectAudioP
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     setSize (500, 300);
+    startTimer(100);
+    
+    addAndMakeVisible(_peak_meter);
 
     // set slider properties
 	_slider_mod_freq.setSliderStyle(Slider::LinearBarVertical);
@@ -43,8 +46,7 @@ NewProjectAudioProcessorEditor::NewProjectAudioProcessorEditor (NewProjectAudioP
     _toggle_button.addListener(this);
 }
 
-NewProjectAudioProcessorEditor::~NewProjectAudioProcessorEditor()
-{
+NewProjectAudioProcessorEditor::~NewProjectAudioProcessorEditor() {
 }
 
 //==============================================================================
@@ -61,8 +63,7 @@ void NewProjectAudioProcessorEditor::paint (Graphics& g)
 
 void NewProjectAudioProcessorEditor::resized()
 {
-    // This is generally where you'll want to lay out the positions of any
-    // subcomponents in your editor..
+    _peak_meter.setBounds(getWidth()/2 + 150, 50, 20, 150);
     _slider_mod_freq.setBounds(getWidth() / 2 - 85, 50, 40, 150);
     _slider_mod_amp.setBounds(getWidth()/2 + 56, 50, 40, 150);
     _toggle_button.setBounds(getWidth() / 2 - 30, 260, 60, 20);
@@ -100,5 +101,10 @@ void NewProjectAudioProcessorEditor::sliderValueChanged(juce::Slider *slider)
         float mod_amp_value = _slider_mod_amp.getValue();
         processor.setParameter(1, mod_amp_value);
     }
+}
+
+void NewProjectAudioProcessorEditor::timerCallback() {
+    float ppm_value = processor.getPeakMeterValue();
+    _peak_meter.setValue(ppm_value);
 }
 

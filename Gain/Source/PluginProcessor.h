@@ -15,6 +15,7 @@
 
 #include "Vibrato.h"
 #include "ErrorDef.h"
+#include "Ppm.h"
 
 //==============================================================================
 /**
@@ -63,9 +64,12 @@ public:
     //==============================================================================
     bool getBypassedState();
     void setBypassedState(bool state);
+    
+    float getPeakMeterValue();
 
 private:
     CVibrato* _vibrato;
+    Ppm* _ppm;
     Error_t _error_check;
     AudioParameterFloat* _mod_frequency;
     AudioParameterFloat* _mod_amplitude;
@@ -73,6 +77,7 @@ private:
     bool _param_updated;
     float _temp_mod_freq;
     float _temp_mod_amp;
+    float* _ppm_value;
     
     void setParameters();
     void setParametersBypassed();
