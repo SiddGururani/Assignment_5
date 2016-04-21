@@ -161,6 +161,10 @@ void NewProjectAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuff
         _vibrato->process(write_pointer, write_pointer, buffer.getNumSamples());
         //const float** read_pointer = buffer.getArrayOfReadPointers();
         _ppm->process(write_pointer, buffer.getNumSamples(), _ppm_value);
+		if (_ppm_value[0] > _max_ppm_value[0])
+			_max_ppm_value[0] = _ppm_value[0];
+		if (_ppm_value[1] > _max_ppm_value[1])
+			_max_ppm_value[1] = _ppm_value[1];
     }
 }
 
@@ -247,7 +251,7 @@ void NewProjectAudioProcessor::setBypassedState(bool state)
 }
 
 float NewProjectAudioProcessor::getPeakMeterValue() {
-    return _ppm_value[0];
+    return _max_ppm_value[0];
 }
 
 /*

@@ -78,6 +78,7 @@ private:
     float _temp_mod_freq;
     float _temp_mod_amp;
     float* _ppm_value;
+	float* _max_ppm_value;
     
     void setParameters();
     void setParametersBypassed();

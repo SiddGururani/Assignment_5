@@ -78,6 +78,8 @@ void NewProjectAudioProcessorEditor::buttonClicked(juce::Button *button)
         {
             _toggle_button.setButtonText("Bypass");
             _toggle_button.setColour (TextButton::buttonColourId, Colours::lightgreen);
+			processor.setParameter(0, _slider_mod_freq.getValue());
+			processor.setParameter(1, _slider_mod_amp.getValue());
         }
         else
         {
