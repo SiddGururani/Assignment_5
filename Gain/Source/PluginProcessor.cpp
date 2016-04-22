@@ -26,6 +26,7 @@ NewProjectAudioProcessor::NewProjectAudioProcessor()
     _vibrato = 0;
     _ppm = 0;
     _ppm_value = 0;
+	_max_ppm_value = 0;
     _is_bypassed = false;
     _param_updated = false;
     _mod_frequency = new AudioParameterFloat("mod freq","Modulation Frequency", MIN_MOD_FREQ, MAX_MOD_FREQ, DEFAULT_MOD_FREQ);
@@ -39,6 +40,7 @@ NewProjectAudioProcessor::~NewProjectAudioProcessor()
     CVibrato::destroyInstance(_vibrato);
     Ppm::destroyInstance(_ppm);
     delete [] _ppm_value;
+	delete[] _max_ppm_value;
 }
 
 //==============================================================================
@@ -128,9 +130,12 @@ void NewProjectAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
     
     
     _ppm_value = new float [num_channels];
+	_max_ppm_value = new float[num_channels];
     for (int i = 0; i < num_channels; i++) {
         _ppm_value[i] = 0;
+		_max_ppm_value[i] = 0;
     }
+
     //initialize with default parameters
     setParameter(0, getParameterDefaultValue(0));
     setParameter(1, getParameterDefaultValue(1));
@@ -175,6 +180,10 @@ void NewProjectAudioProcessor::processBlockBypassed (AudioSampleBuffer& buffer, 
     _vibrato->process(write_pointer, write_pointer, buffer.getNumSamples());
     //const float** read_pointer = buffer.getArrayOfReadPointers();
     _ppm->process(write_pointer, buffer.getNumSamples(), _ppm_value);
+	if (_ppm_value[0] > _max_ppm_value[0])
+		_max_ppm_value[0] = _ppm_value[0];
+	if (_ppm_value[1] > _max_ppm_value[1])
+		_max_ppm_value[1] = _ppm_value[1];
 }
 
 //==============================================================================
