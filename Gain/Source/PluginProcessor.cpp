@@ -260,7 +260,10 @@ void NewProjectAudioProcessor::setBypassedState(bool state)
 }
 
 float NewProjectAudioProcessor::getPeakMeterValue() {
-    return _max_ppm_value[0];
+	float return_val = _max_ppm_value[0];
+	_max_ppm_value[0] = 0;
+	_max_ppm_value[1] = 0;
+    return return_val;
 }
 
 /*
