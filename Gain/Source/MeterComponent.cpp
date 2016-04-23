@@ -21,7 +21,10 @@ MeterComponent::~MeterComponent() {
 void MeterComponent::paint (Graphics& g) {
     g.fillAll (Colours::black);
     if (_peak_meter_value > -12) {
-        g.setColour(Colours::green);
+		if (_peak_meter_value >= 0)
+			g.setColour(Colours::red);
+		else
+			g.setColour(Colours::green);
         int position_x = 0;
         int position_y = getHeight() * (- _peak_meter_value / 12);
         int width = getWidth();
