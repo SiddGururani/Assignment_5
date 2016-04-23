@@ -95,7 +95,7 @@ void NewProjectAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
     // initialisation that you need..
     const int totalNumInputChannels  = getTotalNumInputChannels();
     const int totalNumOutputChannels = getTotalNumOutputChannels();
-    int num_channels = max(totalNumOutputChannels, totalNumInputChannels);
+    _num_channels = max(totalNumOutputChannels, totalNumInputChannels);
     
     if(_vibrato != nullptr) {
         CVibrato::destroyInstance(_vibrato);
@@ -116,22 +116,22 @@ void NewProjectAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
         cerr << "Runtime error. Memory issues." << endl;
     }
     
-    _error_check = _vibrato->initInstance(MAX_MOD_AMP ,sampleRate, num_channels);
+    _error_check = _vibrato->initInstance(MAX_MOD_AMP ,sampleRate, _num_channels);
     if (_error_check == kFunctionInvalidArgsError)
     {
         cerr << "Invalid parameters: One or more parameters is out of bounds. Please check your parameters." << endl;
     }
     
-    _error_check = _ppm->initInstance(sampleRate, num_channels);
+    _error_check = _ppm->initInstance(sampleRate, _num_channels);
     if (_error_check == kFunctionInvalidArgsError)
     {
         cerr << "Invalid parameters: One or more parameters is out of bounds. Please check your parameters." << endl;
     }
     
     
-    _ppm_value = new float [num_channels];
-	_max_ppm_value = new float[num_channels];
-    for (int i = 0; i < num_channels; i++) {
+    _ppm_value = new float [_num_channels];
+	_max_ppm_value = new float[_num_channels];
+    for (int i = 0; i < _num_channels; i++) {
         _ppm_value[i] = 0;
 		_max_ppm_value[i] = 0;
     }
@@ -259,10 +259,9 @@ void NewProjectAudioProcessor::setBypassedState(bool state)
     _is_bypassed = state;
 }
 
-float NewProjectAudioProcessor::getPeakMeterValue() {
-	float return_val = _max_ppm_value[0];
-	_max_ppm_value[0] = 0;
-	_max_ppm_value[1] = 0;
+float NewProjectAudioProcessor::getPeakMeterValue(int index) {
+	float return_val = _max_ppm_value[index];
+	_max_ppm_value[index] = 0;
     return return_val;
 }
 

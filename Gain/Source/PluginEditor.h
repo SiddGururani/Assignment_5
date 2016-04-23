@@ -28,7 +28,8 @@ public:
     Slider _slider_mod_freq;
     Slider _slider_mod_amp;
     TextButton _toggle_button;
-    MeterComponent _peak_meter;
+    MeterComponent _peak_meter_ch_1;
+	MeterComponent _peak_meter_ch_2;
 
     //==============================================================================
     void paint (Graphics&) override;

@@ -21,7 +21,8 @@ NewProjectAudioProcessorEditor::NewProjectAudioProcessorEditor (NewProjectAudioP
     setSize (500, 300);
     startTimer(100);
     
-    addAndMakeVisible(_peak_meter);
+    addAndMakeVisible(_peak_meter_ch_1);
+	addAndMakeVisible(_peak_meter_ch_2);
 
     // set slider properties
 	_slider_mod_freq.setSliderStyle(Slider::LinearBarVertical);
@@ -63,7 +64,8 @@ void NewProjectAudioProcessorEditor::paint (Graphics& g)
 
 void NewProjectAudioProcessorEditor::resized()
 {
-    _peak_meter.setBounds(getWidth()/2 + 150, 50, 20, 150);
+    _peak_meter_ch_1.setBounds(getWidth()/2 + 150, 50, 10, 150);
+	_peak_meter_ch_2.setBounds(getWidth() / 2 + 162, 50, 10, 150);
     _slider_mod_freq.setBounds(getWidth() / 2 - 85, 50, 40, 150);
     _slider_mod_amp.setBounds(getWidth()/2 + 56, 50, 40, 150);
     _toggle_button.setBounds(getWidth() / 2 - 30, 260, 60, 20);
@@ -107,7 +109,9 @@ void NewProjectAudioProcessorEditor::sliderValueChanged(juce::Slider *slider)
 }
 
 void NewProjectAudioProcessorEditor::timerCallback() {
-    float ppm_value = processor.getPeakMeterValue();
-    _peak_meter.setValue(ppm_value);
+    float ppm_value = processor.getPeakMeterValue(0);
+    _peak_meter_ch_1.setValue(ppm_value);
+	ppm_value = processor.getPeakMeterValue(1);
+	_peak_meter_ch_2.setValue(ppm_value);
 }
 

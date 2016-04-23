@@ -65,7 +65,7 @@ public:
     bool getBypassedState();
     void setBypassedState(bool state);
     
-    float getPeakMeterValue();
+    float getPeakMeterValue(int index);
 
 private:
     CVibrato* _vibrato;
@@ -79,6 +79,7 @@ private:
     float _temp_mod_amp;
     float* _ppm_value;
 	float* _max_ppm_value;
+	int _num_channels;
     
     void setParameters();
     void setParametersBypassed();
