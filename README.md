@@ -1,4 +1,4 @@
-# MUSI-8903 Assignment-5 PLugIn Implementation
+# MUSI-8903 Assignment-5 Plugin Implementation
 
 This repository contains the source code and the Jucer project for the Vibrato plugin with a 2 -channel Peak Meter
 
