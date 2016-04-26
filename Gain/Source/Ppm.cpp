@@ -17,14 +17,14 @@ _is_initialized(false),
 _sample_rate(44100),
 _num_channels(0)
 {
-    // this never hurts
+    // this never hurts'
+    _previous_ppm = 0;
     this->resetInstance ();
 }
 
 
 Ppm::~Ppm ()
 {
-    this->resetInstance ();
 }
 
 Error_t Ppm::createInstance (Ppm*& ppm)
@@ -81,6 +81,10 @@ Error_t Ppm::resetInstance ()
     for (int i = 0; i < numPpmParameters; i++)
         setParam((PpmParameter_t)i, 0);
     
+    if (_previous_ppm != nullptr)
+        delete [] _previous_ppm;
+    
+    _previous_ppm      = 0;
     _num_channels      = 0;
     _is_initialized    = false;
     
