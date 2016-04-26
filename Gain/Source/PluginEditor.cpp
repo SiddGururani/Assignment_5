@@ -19,7 +19,7 @@ NewProjectAudioProcessorEditor::NewProjectAudioProcessorEditor (NewProjectAudioP
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     setSize (500, 300);
-    startTimer(100);
+    startTimerHz(100);
     
     addAndMakeVisible(_peak_meter_ch_1);
 	addAndMakeVisible(_peak_meter_ch_2);
